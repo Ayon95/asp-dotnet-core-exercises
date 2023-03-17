@@ -1,0 +1,17 @@
+﻿<h1 class="title">Social Media Links</h1>
+<ul class="social-links">
+    <li>
+        <a href="@ViewBag.FacebookLink">Facebook</a>
+    </li>
+    <environment exclude="Development">
+        <li>
+            <a href="@ViewBag.InstagramLink">Instagram</a>
+        </li>
+    </environment>
+    <li>
+        <a href="@ViewBag.TwitterLink">Twitter</a>
+    </li>
+    <li>
+        <a href="@ViewBag.YoutubeLink">Youtube</a>
+    </li>
+</ul>

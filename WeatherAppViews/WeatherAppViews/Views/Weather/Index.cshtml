@@ -1,0 +1,47 @@
+﻿@model List<CityWeather>
+
+
+@{
+    ViewBag.Title = "Weather App";
+
+    string GetCardBackgroundColor(int temperatureValue)
+    {
+        if (temperatureValue < 44)
+        {
+            return "bg-blue";
+        }
+        else if (temperatureValue >= 44 && temperatureValue < 74)
+        {
+            return "bg-yellow";
+        }
+        else
+        {
+            return "bg-orange";
+        }
+    }
+}
+
+<h1>Weather App</h1>
+<section class="cities-section">
+    <ul class="cities">
+        @foreach (CityWeather city in Model)
+        {
+            <li class="card @GetCardBackgroundColor(city.TemperatureFahrenheit)">
+                <div class="card-column">
+                    <h2>@city.CityName</h2>
+                    <time datetime="@city.DateAndTime">
+                        @city.DateAndTime?.ToShortTimeString()
+                    </time>
+                    <a class="d-block" href="~/weather/@city.CityUniqueCode">Details</a>
+                </div>
+                <div class="card-column">
+                    <span class="bold">
+                        <span class="large-text">@city.TemperatureFahrenheit</span>
+                        <span class="light-text medium-text temp-unit">&deg;F</span>
+                    </span>
+                </div>
+            </li>
+        }
+
+    </ul>
+</section>

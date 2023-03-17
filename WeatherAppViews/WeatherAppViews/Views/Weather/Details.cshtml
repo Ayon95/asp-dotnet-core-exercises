@@ -1,0 +1,32 @@
+﻿@model CityWeather?
+
+@{
+    ViewBag.Title = Model == null ? "Weather App" : $"Weather App - {Model.CityName}";
+}
+
+@if (Model == null)
+{
+    <p class="error-message">No city could be found with the provided city code. Please provide a valid city code.</p>
+}
+else
+{
+    <h1>Weather - @Model.CityName</h1>
+    <article class="card light-border my-1">
+        <div>
+            <h2>@Model.CityName</h2>
+            <time class="d-block light-text" datetime="@Model.DateAndTime">
+                @Model.DateAndTime?.ToShortTimeString()
+            </time>
+            <time class="d-block light-text" datetime="@Model.DateAndTime">
+                @Model.DateAndTime?.ToString("dd MMM yyyy")
+            </time>
+        </div>
+        <div>
+            <span class="bold">
+                <span class="large-text">@Model.TemperatureFahrenheit</span>
+                <span class="light-text medium-text temp-unit">&deg;F</span>
+            </span>
+        </div>
+    </article>
+    <a href="/">Back to Weather Home page</a>
+}

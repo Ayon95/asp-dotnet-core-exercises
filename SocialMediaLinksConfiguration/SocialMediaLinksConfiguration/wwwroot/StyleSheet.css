@@ -1,0 +1,60 @@
+﻿﻿
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.8rem;
+    background-color: #f7f7f7;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    /* using inheritance is more performant than setting box-sizing: border-box on all elements */
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.8rem;
+    background-color: #f7f7f7;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+ul {
+    list-style: none;
+}
+
+input, button, textarea, select {
+    font: inherit;
+}
+
+.title {
+    margin-bottom: 2rem;
+}
+
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.social-links li {
+    padding: 1rem 2rem;
+    border: 1px solid #b6c0d1;
+    border-radius: 4px;
+}
+
+.social-links li a {
+    text-decoration: none;
+}

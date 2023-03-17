@@ -1,0 +1,116 @@
+﻿*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+:root {
+    --color-grey: #a7a8a7;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.8rem;
+    padding: 2rem;
+}
+
+ul {
+    list-style: none;
+}
+
+.cities-section {
+    min-height: 90vh;
+    display: grid;
+    align-content: center;
+}
+
+.cities {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 35rem), 1fr));
+    gap: 2rem;
+}
+
+.card {
+    display: flex;
+    padding: 2rem;
+    border-radius: 4px;
+}
+
+    .card > * {
+        flex: 1;
+    }
+
+    .card > :not(:first-child) {
+        padding-left: 3rem;
+    }
+
+    .card > :not(:last-child) {
+        padding-right: 3rem;
+        border-right: 1px solid var(--color-grey);
+    }
+
+.temp-unit {
+    display: inline-block;
+    transform: translateY(-0.8rem);
+}
+
+.error-message {
+    padding: 2rem;
+    border-radius: 5px;
+    background-color: lightcoral;
+    color: #7d0909;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.restrictive-container {
+    max-width: 140rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bg-blue {
+    background-color: #75cbeb;
+}
+
+.bg-yellow {
+    background-color: #e0dd70;
+}
+
+.bg-orange {
+    background-color: #e0c670;
+}
+
+.d-block {
+    display: block;
+}
+
+.my-1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.light-border {
+    border: 1px solid var(--color-grey);
+}
+
+.medium-text {
+    font-size: 2.4rem;
+}
+
+.large-text {
+    font-size: 2.8rem;
+}
+
+.light-text {
+    color: var(--color-grey);
+}
