@@ -1,0 +1,21 @@
+﻿using Entities;
+using System;
+
+namespace ServiceContracts.DTO
+{
+    /// <summary>
+    /// DTO class for adding a new country
+    /// </summary>
+    public class CountryAddRequest
+    {
+        public string? Name { get; set; }
+
+        public Country ToCountry()
+        {
+            return new Country()
+            {
+                Name = Name,
+            };
+        }
+    }
+}

@@ -1,0 +1,17 @@
+﻿@model StockTrade
+
+<h1>Stocks</h1>
+@if (Model == null)
+{
+    <p>Server could not provide the requested stock details. Please try again later.</p>
+}
+else
+{
+    <article>
+        <p>Stock name: @Model.StockName</p>
+        <p>Stock symbol: @Model.StockSymbol</p>
+        <p id="stock-price">Current price: $@Model.Price</p>
+        <div hidden id="token">@ViewBag.Token</div>
+        <div hidden id="stock-symbol">@ViewBag.StockSymbol</div>
+    </article>
+}
