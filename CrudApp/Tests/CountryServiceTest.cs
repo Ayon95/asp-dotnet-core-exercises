@@ -56,7 +56,7 @@ namespace Tests
                 _countryService.AddCountry(requestData2);
             });
         }
-        // When a valid country name is provided, a country object should be added to the list of countries
+        // When a valid country name is provided, a country object should be added to the list of countries and that CountryResponse object should have a valid ID
         [Fact]
         public void AddCountry_ValidCountryData()
         {
