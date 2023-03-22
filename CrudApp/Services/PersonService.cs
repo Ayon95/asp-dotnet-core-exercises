@@ -40,7 +40,7 @@ namespace Services
 
         public List<PersonResponse> GetAllPersons()
         {
-            throw new NotImplementedException();
+            return _persons.Select(person => ConvertToPersonResponse(person)).ToList();
         }
 
         public PersonResponse? GetPersonById(Guid? id)
@@ -51,7 +51,7 @@ namespace Services
 
             if (person == null) return null;
 
-            return person.ToPersonResponse();
+            return ConvertToPersonResponse(person);
         }
     }
 }
