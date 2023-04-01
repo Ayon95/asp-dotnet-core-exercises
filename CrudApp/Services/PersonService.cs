@@ -2,6 +2,7 @@
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services.Helpers;
+using System.Reflection;
 
 namespace Services
 {
@@ -52,6 +53,24 @@ namespace Services
             if (person == null) return null;
 
             return ConvertToPersonResponse(person);
+        }
+
+        public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchTerm)
+        {
+            List<PersonResponse> allPersons = GetAllPersons();
+            if (string.IsNullOrEmpty(searchTerm) || string.IsNullOrEmpty(searchBy)) return allPersons;
+
+            PropertyInfo? searchProperty = typeof(PersonResponse).GetProperty(searchBy);
+
+            if (searchProperty == null) return new List<PersonResponse>();
+
+            List<PersonResponse> filteredPersons = allPersons.FindAll(person =>
+            {
+                string? value = searchProperty.GetValue(person)?.ToString();
+                if (value == null) return false;
+                return value.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+            });
+            return filteredPersons;
         }
     }
 }

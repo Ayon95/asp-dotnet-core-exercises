@@ -133,7 +133,207 @@ namespace Tests
             Assert.Contains(personResponse2, persons);
         }
         #endregion
+
+        #region GetFilteredPersons
+        // Should return an empty list if persons list is empty
+        [Fact]
+        public void GetFilteredPersons_EmptyList()
+        {
+            List<PersonResponse> result = _personService.GetFilteredPersons("Name", "John Doe");
+            Assert.Empty(result);
+        }
+
+        // Should return a list of all persons if search field does not exist
+        [Fact]
+        public void GetFilteredPersons_InvalidSearchField()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("Location", "123 Amazing Street");
+
+            Assert.Empty(result);
+        }
+
+        // Should return an empty list if search term does not match
+        [Fact]
+        public void GetFilteredPersons_SearchTermDoesNotMatch()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("Address", "456 Amazing Street");
+
+            Assert.Empty(result);
+        }
+
+        // Should return a list of all persons if search term is empty or null
+        [Fact]
+        public void GetFilteredPersons_EmptySearchTerm()
+        {
+            PersonResponse person1 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person2 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("Name", "");
+
+            Assert.Contains(person1, result);
+            Assert.Contains(person2, result);
+        }
+
+        // Should return a list of all persons if search field is empty or null
+        [Fact]
+        public void GetFilteredPersons_EmptySearchField()
+        {
+            PersonResponse person1 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person2 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("", "Michael Smith");
+
+            Assert.Contains(person1, result);
+            Assert.Contains(person2, result);
+        }
+
+        // Should return a list of persons that match the search criteria
+        [Fact]
+        public void GetFilteredPersons_ValidSearchFieldAndSearchTerm()
+        {
+            PersonResponse person1 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person2 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Jane Doe",
+                Email = "jane.doe@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Female,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person3 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Emily Jones",
+                Email = "emily.jones@example.com",
+                DateOfBirth = DateTime.Parse("1996-08-21"),
+                Gender = GenderOptions.Female,
+                CountryId = Guid.NewGuid(),
+                Address = "456 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("Address", "123 Amazing Street");
+
+            Assert.Contains(person1, result);
+            Assert.Contains(person2, result);
+            Assert.DoesNotContain(person3, result);
+        }
+
+        // Searching should be partial and case insensitive
+        [Fact]
+        public void GetFilteredPersons_PartialCaseInsensitiveMatch()
+        {
+            PersonResponse person1 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person2 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            PersonResponse person3 = _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Emily Jones",
+                Email = "emily.jones@example.com",
+                DateOfBirth = DateTime.Parse("1996-08-21"),
+                Gender = GenderOptions.Female,
+                CountryId = Guid.NewGuid(),
+                Address = "456 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> result = _personService.GetFilteredPersons("Name", "emi");
+
+            Assert.Contains(person3, result);
+            Assert.DoesNotContain(person1, result);
+            Assert.DoesNotContain(person2, result);
+        }
+        #endregion
     }
-
-
 }
