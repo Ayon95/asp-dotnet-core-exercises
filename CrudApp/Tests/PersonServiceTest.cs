@@ -143,7 +143,7 @@ namespace Tests
             Assert.Empty(result);
         }
 
-        // Should return a list of all persons if search field does not exist
+        // Should return an empty list if search field does not exist
         [Fact]
         public void GetFilteredPersons_InvalidSearchField()
         {
@@ -333,6 +333,161 @@ namespace Tests
             Assert.Contains(person3, result);
             Assert.DoesNotContain(person1, result);
             Assert.DoesNotContain(person2, result);
+        }
+        #endregion
+
+        #region GetSortedPersons
+        // Should return an empty list if persons list is empty
+        [Fact]
+        public void GetSortedPersons_EmptyList()
+        {
+            List<PersonResponse> persons = _personService.GetAllPersons();
+            List<PersonResponse> result = _personService.GetSortedPersons(persons, "Name", SortOrderOptions.ASC);
+            Assert.Empty(result);
+        }
+        // Should return the provided list if the sortBy is null or empty
+        [Fact]
+        public void GetSortedPersons_EmptyOrNullSortBy()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> persons = _personService.GetAllPersons();
+
+            List<PersonResponse> sortedPersons = _personService.GetSortedPersons(persons, "");
+
+            for (int i = 0; i < sortedPersons.Count; i++)
+            {
+                Assert.Equal(persons[i], sortedPersons[i]);
+            }
+        }
+        // Should return the provided list if the sortBy field does not exist
+        [Fact]
+        public void GetSortedPersons_NonexistentSortByField()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> persons = _personService.GetAllPersons();
+
+            List<PersonResponse> sortedPersons = _personService.GetSortedPersons(persons, "First Name");
+
+            for (int i = 0; i < sortedPersons.Count; i++)
+            {
+                Assert.Equal(persons[i], sortedPersons[i]);
+            }
+        }
+
+        // Should return a properly sorted list in case of valid sortBy and default ASC sortOrder
+        [Fact]
+        public void GetSortedPersons_ValidAscendingSort()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> persons = _personService.GetAllPersons();
+
+            List<PersonResponse> sortedPersons = _personService.GetSortedPersons(persons, "Name");
+            List<PersonResponse> expectedSortedPersons = persons.OrderBy(person => person.Name).ToList();
+
+            for (int i = 0; i < sortedPersons.Count; i++)
+            {
+                Assert.Equal(expectedSortedPersons[i], sortedPersons[i]);
+            }
+        }
+
+        // Should return a properly sorted list in case of valid sortBy and DESC sortOrder
+        [Fact]
+        public void GetSortedPersons_ValidDescendingSort()
+        {
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                DateOfBirth = DateTime.Parse("1992-01-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Amazing Street",
+                ReceiveNewsletters = true,
+            });
+
+            _personService.AddPerson(new PersonAddRequest()
+            {
+                Name = "Michael Smith",
+                Email = "michael.smith@example.com",
+                DateOfBirth = DateTime.Parse("1994-03-15"),
+                Gender = GenderOptions.Male,
+                CountryId = Guid.NewGuid(),
+                Address = "123 Splendid Crescent",
+                ReceiveNewsletters = true,
+            });
+
+            List<PersonResponse> persons = _personService.GetAllPersons();
+
+            List<PersonResponse> sortedPersons = _personService.GetSortedPersons(persons, "Name", SortOrderOptions.DESC);
+            List<PersonResponse> expectedSortedPersons = persons.OrderByDescending(person => person.Name).ToList();
+
+            for (int i = 0; i < sortedPersons.Count; i++)
+            {
+                Assert.Equal(expectedSortedPersons[i], sortedPersons[i]);
+            }
         }
         #endregion
     }

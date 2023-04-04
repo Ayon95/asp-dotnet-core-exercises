@@ -1,6 +1,7 @@
 ﻿using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using ServiceContracts.Enums;
 using Services.Helpers;
 using System.Reflection;
 
@@ -64,13 +65,28 @@ namespace Services
 
             if (searchProperty == null) return new List<PersonResponse>();
 
-            List<PersonResponse> filteredPersons = allPersons.FindAll(person =>
+            List<PersonResponse> filteredPersons = allPersons.Where(person =>
             {
                 string? value = searchProperty.GetValue(person)?.ToString();
                 if (value == null) return false;
                 return value.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
-            });
+            }).ToList();
             return filteredPersons;
+        }
+
+        public List<PersonResponse> GetSortedPersons(List<PersonResponse> persons, string sortBy, SortOrderOptions sortOrder = SortOrderOptions.ASC)
+        {
+            if (persons.Count == 0 || string.IsNullOrEmpty(sortBy)) return persons;
+
+            PropertyInfo? sortByProperty = typeof(PersonResponse).GetProperty(sortBy);
+
+            if (sortByProperty == null) return persons;
+
+            if (sortOrder == SortOrderOptions.DESC)
+            {
+                return persons.OrderByDescending(person => sortByProperty.GetValue(person)).ToList();
+            }
+            return persons.OrderBy(person => sortByProperty.GetValue(person)).ToList();
         }
     }
 }
